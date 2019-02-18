@@ -1,11 +1,13 @@
-///Raster to points: Landsat missions
+///Raster to points: Landsat 8
 ///code to extract Landsat raster data at points (shapefile) that have been loaded 
-///to your account as assets; Here we assumed that you imported the points/assets and called them "table"
-///This code does not return data from cloudy images (> than a % of scene, as specified below) 
-//This code also does not return cloudy pixels
-//This code returns all band data from dates specified and exports it as a .csv 
+///to your account as assets; Here it is assumed that you imported the shapefile/points/assets and called them "table"
+//This code returns all band data from dates specified and exports it as a .csv,  
 //to your google drive account into the folder of your choice
-//usage: import your assest as "table", import
+///This code can limit returned data to only low cloud scenes (< than a % of scene, as specified below) 
+//This code can also limit the return of cloudy pixels through the cloudMAskL8 function
+//usage: import your assest as "table", edit the dates to those you want in the .filterDate line, 
+//       check that .filterMetadata('Cloud_Cover', 'less_than', xx) meets your needs, where xx is the percent of clouds
+//       create a geometry object that covers the spatial area you want and run
 
 var pts = ee.FeatureCollection(table);
 
