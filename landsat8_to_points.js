@@ -5,6 +5,7 @@
 //This code also does not return cloudy pixels
 //This code returns all band data from dates specified and exports it as a .csv 
 //to your google drive account into the folder of your choice
+//usage: import your assest as "table", import
 
 var pts = ee.FeatureCollection(table);
 
@@ -25,27 +26,9 @@ function cloudMaskL8(image) {
   return image.updateMask(mask);
 }
 
-/**
- * Function to mask clouds based on the pixel_qa band of Landsat SR data, missions 4,5,7.
- * @param {ee.Image} image Input Landsat SR image
- * @return {ee.Image} Cloudmasked Landsat image
- */
-var cloudMaskL457 = function(image) {
-  var qa = image.select('pixel_qa');
-  // If the cloud bit (5) is set and the cloud confidence (7) is high
-  // or the cloud shadow bit is set (3), then it's a bad pixel.
-  var cloud = qa.bitwiseAnd(1 << 5)
-                  .and(qa.bitwiseAnd(1 << 7))
-                  .or(qa.bitwiseAnd(1 << 3));
-  // Remove edge pixels that don't occur in all bands
-  var mask2 = image.mask().reduce(ee.Reducer.min());
-  return image.updateMask(cloud.not()).updateMask(mask2);
-};
-
-
-//IMPORT raster, here we use Landsat 8, you can find the Image Collection Id for other image sources in the searchbox at the top of the screen
-//for Landsat 5 use: var myraster = ee.ImageCollection('LANDSAT/LT05/C01/T1_SR') instead
-//limit the spatial location with filterBounds(geometry) where geometry is a shape you've map with the drawing tool in the lower map window
+//IMPORT raster, here we use Landsat 8, 
+//limit the spatial location with filterBounds(geometry) 
+//where geometry is a shape you've drawn on the map with the drawing tool in the lower map window
 //limit the dates with filterDate
 //limit cloudy scenes with the 'CLOUD_COVER' scene metadata variable
 var myraster = ee.ImageCollection('LANDSAT/LC08/C01/T1_SR') 
@@ -53,8 +36,6 @@ var myraster = ee.ImageCollection('LANDSAT/LC08/C01/T1_SR')
 .filterDate('2012-12-01','2018-06-05')
 //remove images where whole image has lots of cloud cover
 .filterMetadata('CLOUD_COVER' , 'less_than', 30)
-//remove cloudy pixels for Landsat 4, 5, or 7
-//.map(cloudMaskL457);
 //remove cloudy pixels for Landsat 8
 .map(cloudMaskL8);
 
