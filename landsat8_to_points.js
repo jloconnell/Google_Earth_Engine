@@ -5,7 +5,7 @@
 //to your google drive account into the folder of your choice
 ///This code can limit returned data to only low cloud scenes (< than a % of scene, as specified below) 
 //This code can also limit the return of cloudy pixels through the cloudMAskL8 function
-//usage: import your assest as "table", edit the dates to those you want in the .filterDate line, 
+//usage: import your asset as "table", edit the dates to those you want in the .filterDate line, 
 //       check that .filterMetadata('Cloud_Cover', 'less_than', xx) meets your needs, where xx is the percent of clouds
 //       create a geometry object that covers the spatial area you want and run
 
